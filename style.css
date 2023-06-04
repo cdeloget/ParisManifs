@@ -1,0 +1,12 @@
+/* Charte de couleurs */
+
+.bg-noir, body {color: #1d1f1f; background-color: #1d1f1f;}
+
+.bg-clair-rouge {color: #c8c0c0; background-color: #c8c0c0;}
+
+.bg-clair-vert {color: #b8bbb3; background-color: #b8bbb3;}
+
+
+h1 
+{color: #b8bbb3;
+text-align: center;}
