@@ -7,6 +7,31 @@
 .bg-clair-vert {color: #b8bbb3; background-color: #b8bbb3;}
 
 
-h1 
-{color: #b8bbb3;
-text-align: center;}
+/* Couleur du texte */
+
+h1, td, .labelmap
+{
+    color: #b8bbb3;
+    fill: gray;
+    font-family: Alef, Bahnschrift, Arial;
+    text-align: center;
+}
+
+/* Dimensions et bordures des liens de la page d'accueil (sous forme de tableaux) */
+table {
+    width: 90%;
+}
+
+td {
+    display: block;
+    border: solid 0.25px white;
+    padding:2% 0% 2% 0%;
+}
+
+/* Positionnement de la div contenant la carte */
+
+div#carto {
+    margin: 2% 5% 5% 5%;
+    background-color: #1d1f1f;
+}
+
