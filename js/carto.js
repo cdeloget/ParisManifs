@@ -46,6 +46,22 @@ const svg = d3.select('#carto').append("svg")
         .style("fill", "gray");
 
 
+
+
+    // AJout du parcours des cortèges intersyndicaux
+
+    const parcours = svg.append('g')
+
+    parcours.selectAll("path")
+        .data(parcoursmanifs.features)
+        .enter()
+        .append("path")
+        .attr("d", map)
+        .style("stroke", "red")
+        .style("stroke-width", "2px")
+        .style("fill", "none")
+
+
     //Placement du texte des toponymes
     const labels = svg.append('g');
 

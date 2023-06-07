@@ -17,6 +17,21 @@ h1, td, .labelmap
     text-align: center;
 }
 
+td a {
+    color: #b8bbb3;
+    text-decoration: none;
+}
+
+td:hover {
+    background-color: #b8bbb3;
+    border-color: red;
+}
+
+td:hover>a {
+    color: black;
+    font-weight: 700;
+}
+
 /* Dimensions et bordures des liens de la page d'accueil (sous forme de tableaux) */
 table {
     width: 90%;
