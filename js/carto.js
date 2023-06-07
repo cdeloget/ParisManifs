@@ -10,7 +10,7 @@ const mapwidth = window.innerWidth * 0.9, mapheight = window.innerHeight * 0.95;
 const map = d3.geoPath();
 const proj = d3.geoMercator()
     .center([2.28, 48.88])
-	.scale(400000);
+	.scale(300000);
 map.projection(proj);
 
 //ajout d'un groupe svg à la div qui doit contenir la carte
