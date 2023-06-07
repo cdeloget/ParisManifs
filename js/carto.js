@@ -8,10 +8,19 @@ const mapwidth = window.innerWidth * 0.9, mapheight = window.innerHeight * 0.95;
 //définition d'un objet géographique (geoPath) et d'une projection
 
 const map = d3.geoPath();
-const proj = d3.geoMercator()
-    .center([2.28, 48.88])
-	.scale(300000);
-map.projection(proj);
+
+//utilisation d'une projection de Mercator
+ //const proj = d3.geoMercator()
+ //   .center([2.28, 48.88])
+ //	.scale(300000);
+
+//Affichage sans projection : utilisation des valeurs coords du geojson comme coordonnées SVG
+var proj = d3.geoIdentity()
+.reflectY(true) //inversion des valeurs y (en svg, le pt 0 est en haut à gauche, et les valeurs y sont donc négatives)
+.fitSize([mapwidth, mapheight], basemapparis);
+
+map.projection(proj); //assignation de la projection définie à l'objet geographique map
+
 
 //ajout d'un groupe svg à la div qui doit contenir la carte
 
