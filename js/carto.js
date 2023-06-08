@@ -59,7 +59,11 @@ const svg = d3.select('#carto').append("svg")
 
     // AJout du parcours des cortèges intersyndicaux
 
-    const parcours = svg.append('g')
+        //variation de couleurs en fonction de la date
+        // var myColor = d3.scaleLinear().domain([d3.min(parcoursmanifs, d=>d.properties.Date), d3.max(parcoursmanifs, d=>d.properties.Date)])
+        //     .range(["white", "blue"]);
+
+    const parcours = svg.append('g');
 
     parcours.selectAll("path")
         .data(parcoursmanifs.features)
@@ -67,8 +71,9 @@ const svg = d3.select('#carto').append("svg")
         .append("path")
         .attr("d", map)
         .style("stroke", "red")
+        //.style("stroke", (d)=>{return myColor(d)})
         .style("stroke-width", "2px")
-        .style("fill", "none")
+        .style("fill", "none");
 
 
     //Placement du texte des toponymes
@@ -83,6 +88,5 @@ const svg = d3.select('#carto').append("svg")
         .attr("y", (d)=>{return map.centroid(d)[1] - 15} )
         .text((d)=>{return d.properties.toponyme;} );
 
-    console.log(lieuxmanifs.features[1].geometry.coordinates[0])
 
 
