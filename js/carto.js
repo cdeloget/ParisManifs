@@ -70,9 +70,9 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
         .style("stroke-width", "5px")
         .style("fill", "none")
         .on("mouseover", (d) => {
-            console.log(d.target)
+            //console.log(d.target)
             d3.select(d.target).style("stroke", "orange").style("stroke-width", "10px");
-            tooltip.text(d.target.__data__.properties.Lieu_depart + ' --> ' + d.target.__data__.properties.Lieu_arrivee)
+            tooltip.text(d.target.__data__.properties.Lieu_depart + ' --> ' + d.target.__data__.properties.Lieu_arrivee + '. Journée du '+ d.target.__data__.properties.Date.toString())
         }).on("mouseout", (d) => {
             d3.select(d.target).style("stroke", "red").style("stroke-width", "5px");
             setTimeout(
@@ -83,9 +83,6 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
             );
 
 
-
-
-    
     //Ajout de certains toponymes d'interet (figuré ponctuel)
     const localites = svg.append('g');
 
