@@ -30,6 +30,10 @@ const svg = d3.select('#carto').append("svg")
   .attr("height", mapheight);
 
 
+//Div pour affichage info carte
+
+var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").style("color", "white")
+
 //Ajout des couches de données
 
     //ajout d'un groupe svg contenant le fond de carte Paris
@@ -70,10 +74,25 @@ const svg = d3.select('#carto').append("svg")
         .enter()
         .append("path")
         .attr("d", map)
+        .attr("fake", (d)=>{
+            console.log(d);
+        })
         .style("stroke", "red")
         //.style("stroke", (d)=>{return myColor(d)})
-        .style("stroke-width", "2px")
-        .style("fill", "none");
+        .style("stroke-width", "5px")
+        .style("fill", "none")
+        .on("mouseover", (d) => {
+            console.log(d.target)
+            d3.select(d.target).style("stroke", "orange").style("stroke-width", "10px");
+            tooltip.text(d.target.__data__.properties.Lieu_depart + ' --- ' + d.target.__data__.properties.Lieu_arrivee)
+        }).on("mouseout", (d) => {
+            d3.select(d.target).style("stroke", "red").style("stroke-width", "5px");
+            setTimeout(
+                    (d)=>{
+                    tooltip.text("---")},
+                1200) 
+            }
+            );
 
 
     //Placement du texte des toponymes

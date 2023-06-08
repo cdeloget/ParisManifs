@@ -9,7 +9,7 @@
 
 /* Couleur du texte */
 
-h1, td, .labelmap
+h1, td, .labelmap, #tooltip
 {
     color: #b8bbb3;
     fill: gray;
@@ -48,5 +48,15 @@ td {
 div#carto {
     margin: 2% 5% 5% 5%;
     background-color: #1d1f1f;
+}
+
+/* Tooltip carto */
+
+#tooltip {
+    bottom: 0;
+    position: fixed;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    margin: auto;
 }
 
