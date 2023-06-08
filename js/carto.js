@@ -48,18 +48,6 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
         .style("fill", "#363939")
         .style("stroke-width", 2);
 
-    //Idem pourr ajouter certains toponymes (figuré ponctuel)
-    const localites = svg.append('g');
-
-    localites.selectAll("path")
-        .data(lieuxmanifs.features)
-        .enter()
-        .append("path")
-        .attr("d", map)
-        .style("fill", "gray");
-
-
-
 
     // AJout du parcours des cortèges intersyndicaux
 
@@ -95,6 +83,20 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
             );
 
 
+
+
+    
+    //Ajout de certains toponymes d'interet (figuré ponctuel)
+    const localites = svg.append('g');
+
+    localites.selectAll("path")
+        .data(lieuxmanifs.features)
+        .enter()
+        .append("path")
+        .attr("d", map)
+        .style("fill", "gray");
+
+        
     //Placement du texte des toponymes
     const labels = svg.append('g');
 
@@ -106,6 +108,4 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
         .attr("x", (d)=>{return map.centroid(d)[0] + 5} )
         .attr("y", (d)=>{return map.centroid(d)[1] - 15} )
         .text((d)=>{return d.properties.toponyme;} );
-
-
 
