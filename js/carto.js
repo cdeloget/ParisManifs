@@ -118,7 +118,7 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
             setTimeout(
                     (d)=>{
                     tooltip.text("---")},
-                1600) 
+                3000) 
             }
             );
 
