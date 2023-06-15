@@ -43,6 +43,16 @@ td {
     padding:2% 0% 2% 0%;
 }
 
+/* Div pour affichage de la légende */
+
+#legend {
+    height: 10%;
+    width: 20%;
+    margin-left: auto;
+    margin-right: 5%;
+    float: right;
+}
+
 /* Positionnement de la div contenant la carte */
 
 div#carto {
@@ -59,5 +69,11 @@ div#carto {
     padding-top: 3%;
     padding-bottom: 3%;
     margin: auto;
+}
+
+.date_leg {
+    fill: lightgray;
+    font-size: large;
+    font-weight: 600;
 }
 
