@@ -60,7 +60,7 @@ div#carto {
     background-color: #1d1f1f;
 }
 
-/* Tooltip carto */
+/* Tooltip infos carto */
 
 #tooltip {
     font-size: large;
@@ -71,9 +71,18 @@ div#carto {
     margin: auto;
 }
 
+/* Texte de la légende */
+
+.date_leg, .date_cursor {
+    font-size: medium;
+    font-weight: 600;
+}
+
 .date_leg {
     fill: lightgray;
-    font-size: large;
-    font-weight: 600;
+}
+
+.date_cursor {
+    fill: orange;
 }
 

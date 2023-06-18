@@ -113,6 +113,14 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
                 .getTime());
         }
 
+        //fonction qui détermine les coordonnées du curseur en fonction de la date, et les renvoie dans un array
+        function cursordatepos (feature) {
+           let legendwidth = $("#legend rect")[0].getBBox().width;
+           var dategap = d3.extent(dates)[1] - d3.extent(dates)[0];
+           var cursorxposition = ((new Date(feature.properties.Date).getTime() - d3.extent(dates)[0]) * legendwidth) / dategap;
+           console.log(cursorxposition);
+           return cursorxposition;
+        }
 
 
 
@@ -128,19 +136,23 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
             //.style("stroke", (d)=>{return myColor(d)})
             .style("stroke-width", "5px")
             .style("fill", "none")
-            .on("mouseover", (d) => { // au survol, au affiche le marker end
-                d3.select('#arrow').style("visibility", "visible");
-                d3.select(d.target).style("stroke", "orange").style("stroke-width", "10px");
-                console.log(d);
+            .on("mouseover", (d) => { // au survol, 
+                d3.select('#arrow').style("visibility", "visible"); //rendre visible les tetes de fleches
+                d3.select(d.target).style("stroke", "orange").style("stroke-width", "10px"); //grossir le trait survolé et le colorer en orange
+                createcursor(cursordatepos(d.target.__data__), d.target.__data__.properties.Date); // création du curseur en légende
+                console.log(d.target.__data__);
                 tooltip.text(d.target.__data__.properties.Lieu_depart + ' --> ' + d.target.__data__.properties.Lieu_arrivee + '. Journée du '+ d.target.__data__.properties.Date.toString())
             })
-            .on("mouseout", (d) => {
+            .on("mouseout", (d) => { //lorsque la souris n'est plus sur un élément
                 //d3.select("#arrow").style("visibility", "hidden");
                 d3.select(d.target).style("stroke", d => colorpath(d)).style("stroke-width", "5px");
                 setTimeout(
                         (d)=>{
                         tooltip.text("---")},
-                    4000) 
+                    4000);
+
+                d3.select("#cursor").remove() //suppression de la barre en légende
+                d3.select("#date_cursor").remove() //suppression de la date en légende
                 }
                 );
 
@@ -178,7 +190,7 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
     var legend = d3.select('#legend') //selection de la div qui va contenir la légende
         .append("svg") //ajout d'une balise svg
         .attr("id", "svglegend")
-        .attr("height", window.innerHeight*0.03)
+        .attr("height", window.innerHeight*0.05)
         .attr("width", "100%")
 
 
@@ -213,13 +225,62 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
     var legrect = legend.append("rect") //ajout d'un rectangle
         .attr("x", 5)
         .attr("y", 5)
-        .attr("height", "100%")
+        .attr("height", "50%")
         .attr("width", "100%")
         .attr("fill", "url(#gradient)")
 
 
-    // ajout texte dates
 
-    legend.append("text").attr("class", "date_leg").attr("id", "date_min").attr("x", "5%").attr("y", "80%").attr("text-anchor", "start").text("19 janv")
 
-    legend.append("text").attr("class", "date_leg").attr("id", "date_max").attr("x", "95%").attr("y", "80%").attr("text-anchor", "end").text("6 juin")
+    // III) bis : Curseur date
+    function createcursor(xpos, datelabel) {
+        console.log(xpos);
+        console.log(datelabel)
+
+        //mise en forme de l'affichage de la date
+        var date_displayed = new Date(datelabel) //création d'un élément de type Date à partir d'une string
+        date_displayed = date_displayed.getDay().toString().concat('/',(date_displayed.getMonth( ) + 1).toString()) //on ajout 1 car js compte les mois à partir de 0..
+        console.log(date_displayed);
+
+        //adaptation de la position de l'affichage de la date pour qu'elle ne sorte pas du cadre
+        let legendwidth = $("#legend rect")[0].getBBox().width; //largeur de la zone de légende
+        console.log(legendwidth)
+        if ( xpos < (legendwidth/2)){
+            var xpostext = xpos + 15;
+        } else {
+            var xpostext= xpos - 15;
+        }
+
+        //ajout d'un objet svg line avec un x passé en argument de la fct
+        legend.append("line")
+            .attr("id", "cursor")
+            .attr("x1", xpos).attr("y1", "0%").attr("x2", xpos).attr("y1", "60%")
+            .attr("stroke", "orange").attr("stroke-width", "10px");
+        //affichage de la date survolée en un texte qui suit le curseur
+        legend.append("text")
+            .attr("id", "date_cursor")
+            .attr("class", "date_cursor")
+            .attr("x", xpostext)
+            .attr("y", "100%")
+            .attr("text-anchor", "middle")
+            .text(date_displayed)
+    }
+
+
+        // ajout texte dates
+
+        legend.append("text")
+            .attr("class", "date_leg")
+            .attr("id", "date_min")
+            .attr("x", "5%")
+            .attr("y", "50%")
+            .attr("text-anchor", "start")
+            .text("19 janv") //date min
+
+        legend.append("text")
+            .attr("class", "date_leg")
+            .attr("id", "date_max")
+            .attr("x", "95%")
+            .attr("y", "50%")
+            .attr("text-anchor", "end")
+            .text("6 juin") //date max
