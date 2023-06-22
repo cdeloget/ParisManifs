@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 //---------------- Création de la carte avec d3js ---------------
 ///////////////////////////////////////////////////////////////////
 
@@ -46,7 +46,7 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
 
     // O) Ajout d'un groupe svg contenant le fond de carte Paris
     const paris = svg.append('g');
-
+    //ajout d'un path svg en utilisant comme data une variable contenant un json avec les coordonnées
     paris.selectAll("path")
         .data(basemapparis.features)
         .enter()
@@ -60,13 +60,8 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
 
     // I) Ajout du parcours des cortèges intersyndicaux
 
-        //variation de couleurs en fonction de la date
-        // var myColor = d3.scaleTime().domain(d3.extent())
-        //     .range(["white", "blue"]);
 
         const parcours = svg.append('g'); //ajout d'un groupe contenant les lignes des parcours
-
-
 
 
         //______a) Flèches _____________
@@ -77,7 +72,7 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
         const arrowPoints = [[0, 0], [0, arrowviewboxsize], [arrowviewboxsize, arrowviewboxsize/2]]; //cordonnées d'un triangle qui fera office de tete de fleche
 
         parcours
-            .append('defs') //ajout d'un élément defs. Flèches
+            .append('defs') //ajout d'un élément defs. (élement réutilisé plus tard) Flèches
             .append('marker')
             .attr('id', 'arrow')
             .attr('viewBox', [0, 0, arrowviewboxsize, arrowviewboxsize])
@@ -87,7 +82,7 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
             .attr('markerHeight', arrowsize)
             .attr('orient', 'auto-start-reverse')
             .append('path')
-            .attr('d', d3.line()(arrowPoints)) //création d'une ligne depuis les points définis plus haut
+            .attr('d', d3.line()(arrowPoints)) //création d'une ligne avec les points définis plus haut
             .attr('fill', 'red');
 
 
@@ -104,7 +99,7 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
         console.log(d3.extent(dates))
 
         //création d'une échelle de couleurs
-        var mypal = d3.scaleLinear() //palette de couleur
+        var mypal = d3.scaleLinear() //échelle linéaire (valeurs continues)
             .domain(d3.extent(dates)) //fourchette des dates
             .range([color_date_debut, color_date_fin]); //fourchette de couleurs
 
@@ -113,11 +108,11 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
                 .getTime());
         }
 
-        //fonction qui détermine les coordonnées du curseur en fonction de la date, et les renvoie dans un array
-        function cursordatepos (feature) {
-           let legendwidth = $("#legend rect")[0].getBBox().width;
-           var dategap = d3.extent(dates)[1] - d3.extent(dates)[0];
-           var cursorxposition = ((new Date(feature.properties.Date).getTime() - d3.extent(dates)[0]) * legendwidth) / dategap;
+        //fonction, appelée au mouseover, qui détermine les coordonnées du curseur en fonction de la date, et les renvoie dans un array
+        function cursordatepos (feature) { //lorsqu'une feature est passée en 
+           let legendwidth = $("#legend rect")[0].getBBox().width; //on récupère la largeur du rectangle de légende
+           var dategap = d3.extent(dates)[1] - d3.extent(dates)[0]; //on centre la date avec datemin = 0, en soustrayant la date min
+           var cursorxposition = ((new Date(feature.properties.Date).getTime() - d3.extent(dates)[0]) * legendwidth) / dategap; //on détermine la position du curseur en x avec une règle de 3
            console.log(cursorxposition);
            return cursorxposition;
         }
@@ -127,13 +122,12 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
         //_____c) Affichage du linéaire des parcours _______________
 
         var parcours_affiche = parcours.selectAll("path")
-            .data(parcoursmanifs.features) //selection d'un jeu de données
+            .data(pathoffset(parcoursmanifs).features) //selection d'un jeu de données
             .enter()
             .append("path") //ajout d'un path au groupe svg parcours
             .attr("d", map)
             .attr('marker-end', 'url(#arrow)') //marker end qui renvoie vers le defs arrows (par défaut invisible)
             .style("stroke", d => colorpath(d) ) //la couleur de la ligne est retournée avec la fonction colorpath (voir plus haut)
-            //.style("stroke", (d)=>{return myColor(d)})
             .style("stroke-width", "5px")
             .style("fill", "none")
             .on("mouseover", (d) => { // au survol, 
@@ -141,7 +135,7 @@ var tooltip = d3.select("#tooltip").text("Passer la souris sur un parcours").sty
                 d3.select(d.target).style("stroke", "orange").style("stroke-width", "10px"); //grossir le trait survolé et le colorer en orange
                 createcursor(cursordatepos(d.target.__data__), d.target.__data__.properties.Date); // création du curseur en légende
                 console.log(d.target.__data__);
-                tooltip.text(d.target.__data__.properties.Lieu_depart + ' --> ' + d.target.__data__.properties.Lieu_arrivee + '. Journée du '+ d.target.__data__.properties.Date.toString())
+                tooltip.text(d.target.__data__.properties.Lieu_depart + ' --> ' + d.target.__data__.properties.Lieu_arrivee)
             })
             .on("mouseout", (d) => { //lorsque la souris n'est plus sur un élément
                 //d3.select("#arrow").style("visibility", "hidden");
